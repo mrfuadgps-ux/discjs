@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR For School</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .header h2 {
+            color: #667eea;
+            margin: 10px 0;
+            font-size: 1.5em;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        
+        .instructions ul {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(255,71,87,0.3);
+            z-index: 1000;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #e8f0fe;
+        }
+        
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .option-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .result-card {
+            text-align: center;
+        }
+        
+        .result-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .result-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .footer-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .website-link {
+            color: #667eea;
+            font-weight: 600;
+            margin: 10px 0;
+            text-decoration: none;
+        }
+        
+        .credit {
+            color: #999;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Registration Form -->
+        <div id="registrationForm" class="card">
+            <div class="header">
+                <h1>HR For School</h1>
+                <h2>Dr. Jumadi Subur</h2>
+                <p>Silakan isi data diri Anda untuk memulai test</p>
+            </div>
+            
+            <form id="regForm">
+                <div class="form-group">
+                    <label for="fullName">Nama Lengkap *</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">No. Telepon *</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="division">Divisi *</label>
+                    <input type="text" id="division" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="institution">Instansi *</label>
+                    <input type="text" id="institution" required>
+                </div>
+                
+                <button type="submit" class="btn">Mulai Test</button>
+                
+                <div class="footer-info">
+                    <div class="website-link">www.jumadisubur.com</div>
+                    <div class="credit">By. Mr. Fu</div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Instructions -->
+        <div id="instructionsPage" class="card hidden">
+            <div class="header">
+                <h1>Petunjuk Pengerjaan</h1>
+            </div>
+            
+            <div class="instructions">
+                <h3>Cara Mengerjakan Test:</h3>
+                <ul>
+                    <li><strong>Waktu:</strong> Anda memiliki waktu 10 menit untuk menyelesaikan test</li>
+                    <li><strong>Soal:</strong> Terdapat 24 soal yang harus dijawab</li>
+                    <li><strong>Jawaban:</strong> Setiap soal memiliki 2 pilihan jawaban</li>
+                    <li><strong>Pilihan:</strong> Pilih "PALING" untuk yang paling menggambarkan diri Anda</li>
+                    <li><strong>Pilihan:</strong> Pilih "KURANG" untuk yang kurang menggambarkan diri Anda</li>
+                    <li><strong>Aturan:</strong> Tidak boleh memilih jawaban yang sama untuk kedua pilihan</li>
+                    <li><strong>Navigasi:</strong> Tidak ada tombol kembali, jawab dengan hati-hati</li>
+                    <li><strong>Auto Submit:</strong> Test akan otomatis selesai ketika waktu habis</li>
+                </ul>
+            </div>
+            
+            <button id="startTest" class="btn">Mulai Mengerjakan</button>
+        </div>
+        
+        <!-- Test Page -->
+        <div id="testPage" class="card hidden">
+            <div id="timer" class="timer">10:00</div>
+            
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div id="questionContainer" class="question-container">
+                <!-- Questions will be loaded here -->
+            </div>
+            
+            <button id="nextQuestion" class="btn" disabled>Lanjut</button>
+        </div>
+        
+        <!-- Results Page -->
+        <div id="resultsPage" class="card hidden">
+            <div class="result-card">
+                <h1 class="result-title">Test Selesai!</h1>
+                <div class="result-summary">
+                    <h3>Data Anda telah berhasil dikirim</h3>
+                    <p>Terima kasih telah mengikuti test kepribadian. Hasil test Anda telah disimpan dan akan segera diproses.</p>
+                    <div id="submissionStatus" style="margin: 20px 0; padding: 15px; background: #d4edda; border-radius: 8px; color: #155724;">
+                        <strong>Status:</strong> <span id="statusText">Mengirim data...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test data
+        const questions = [
+            {
+                options: [
+                    { text: "Petualang, Mengambil risiko", type: "D" },
+                    { text: "Percaya, Mudah percaya pada orang", type: "I" },
+                    { text: "Gampangan, Mudah setuju", type: "S" },
+                    { text: "Toleran, Menghormati", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Hasil adalah penting", type: "D" },
+                    { text: "Dibuat menyenangkan", type: "I" },
+                    { text: "Mari kerjakan bersama", type: "S" },
+                    { text: "Lakukan dengan benar, Akurasi penting", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Prestasi, Ganjaran", type: "D" },
+                    { text: "Sosial, Perkumpulan kelompok", type: "I" },
+                    { text: "Keselamatan, Keamanan", type: "S" },
+                    { text: "Pendidikan, Kebudayaan", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Optimistik, Visioner", type: "D" },
+                    { text: "Pusat perhatian, Suka gaul", type: "I" },
+                    { text: "Pendamai, Membawa harmoni", type: "S" },
+                    { text: "Lembut suara, Pendiam", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Akan mengusahakan yang kuinginkan", type: "D" },
+                    { text: "Akan membeli sesuai dorongan hati", type: "I" },
+                    { text: "Akan menunggu, Tanpa tekanan", type: "S" },
+                    { text: "Akan berjalan terus tanpa kontrol diri", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Memimpin, Pendekatan langsung", type: "D" },
+                    { text: "Suka bergaul, Antusias", type: "I" },
+                    { text: "Dapat diramal, Konsisten", type: "S" },
+                    { text: "Waspada, Hati-hati", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Ingin membuat tujuan", type: "D" },
+                    { text: "Menyemangati orang", type: "I" },
+                    { text: "Bagian dari kelompok", type: "S" },
+                    { text: "Berusaha sempurna", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Aktif mengubah sesuatu", type: "D" },
+                    { text: "Unik, Bosan rutinitas", type: "I" },
+                    { text: "Ramah, Mudah bergabung", type: "S" },
+                    { text: "Butuh aturan yang jelas", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Tidak mudah dikalahkan", type: "D" },
+                    { text: "Mudah terangsang, Riang", type: "I" },
+                    { text: "Kerjakan sesuai perintah, Ikut pimpinan", type: "S" },
+                    { text: "Ingin segala teratur, Rapi", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Siap beroposisi", type: "D" },
+                    { text: "Menceritakan sisi saya", type: "I" },
+                    { text: "Menyimpan perasaan saya", type: "S" },
+                    { text: "Menjadi frustasi", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Menuntut, Tegas", type: "D" },
+                    { text: "Perubahan pada menit terakhir", type: "I" },
+                    { text: "Non-konfrontasi, Menyerah", type: "S" },
+                    { text: "Dipenuhi hal detail", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Saya akan pimpin mereka", type: "D" },
+                    { text: "Saya akan meyakinkan mereka", type: "I" },
+                    { text: "Saya akan melaksanakan", type: "S" },
+                    { text: "Saya akan dapatkan fakta", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Gerak cepat, Tekun", type: "D" },
+                    { text: "Hidup, Suka bicara", type: "I" },
+                    { text: "Usaha menjaga keseimbangan", type: "S" },
+                    { text: "Usaha mengikuti aturan", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Ingin kemajuan", type: "D" },
+                    { text: "Terbuka memperlihatkan perasaan", type: "I" },
+                    { text: "Menyukai kestabilan, Tidak suka perubahan", type: "S" },
+                    { text: "Teliti dan berhati-hati", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Kompetitif, Suka tantangan", type: "D" },
+                    { text: "Optimis, Positif", type: "I" },
+                    { text: "Memikirkan orang dahulu", type: "S" },
+                    { text: "Pemikir logis, Sistematik", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Kelola waktu secara efisien", type: "D" },
+                    { text: "Masalah sosial itu penting", type: "I" },
+                    { text: "Tenang, Tidak terburu-buru", type: "S" },
+                    { text: "Suka selesaikan apa yang saya mulai", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Tak gentar, Berani", type: "D" },
+                    { text: "Bahagia, Tanpa beban", type: "I" },
+                    { text: "Tenang, Pendiam", type: "S" },
+                    { text: "Menyenangkan, Baik hati", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Berani, Tak gentar", type: "D" },
+                    { text: "Tertawa lepas, Hidup", type: "I" },
+                    { text: "Menyenangkan orang, Mudah setuju", type: "S" },
+                    { text: "Tenang, Pendiam", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Tidak takut bertempur", type: "D" },
+                    { text: "Cenderung janji berlebihan", type: "I" },
+                    { text: "Tolak perubahan mendadak", type: "S" },
+                    { text: "Tarik diri di tengah tekanan", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Menerima ganjaran atas tujuan yang dicapai", type: "D" },
+                    { text: "Bepergian demi petualangan baru", type: "I" },
+                    { text: "Menggunakan waktu berkualitas dengan teman", type: "S" },
+                    { text: "Rencanakan masa depan, Bersiap", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Ingin otoritas lebih", type: "D" },
+                    { text: "Ingin kesempatan baru", type: "I" },
+                    { text: "Menghindari konflik", type: "S" },
+                    { text: "Ingin petunjuk yang jelas", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Delegator yang baik", type: "D" },
+                    { text: "Penyemangat yang baik", type: "I" },
+                    { text: "Pendengar yang baik", type: "S" },
+                    { text: "Penganalisa yang baik", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Aturan perlu dipertanyakan", type: "D" },
+                    { text: "Aturan membuat bosan", type: "I" },
+                    { text: "Aturan membuat aman", type: "S" },
+                    { text: "Aturan membuat adil", type: "C" }
+                ]
+            },
+            {
+                options: [
+                    { text: "Garis dasar, Orientasi hasil", type: "D" },
+                    { text: "Kreatif, Unik", type: "I" },
+                    { text: "Dapat diandalkan, Dapat dipercaya", type: "S" },
+                    { text: "Jalankan standar yang tinggi, Akurat", type: "C" }
+                ]
+            }
+        ];
+
+        // Global variables
+        let currentQuestion = 0;
+        let answers = [];
+        let timeLeft = 600; // 10 minutes in seconds
+        let timerInterval;
+        let participantData = {};
+        let shuffledQuestions = [];
+
+        // Shuffle questions
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Initialize shuffled questions
+        function initializeQuestions() {
+            shuffledQuestions = shuffleArray(questions);
+            // Also shuffle options within each question
+            shuffledQuestions.forEach(question => {
+                question.shuffledOptions = shuffleArray(question.options);
+            });
+        }
+
+        // Registration form handler
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            participantData = {
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                division: document.getElementById('division').value,
+                institution: document.getElementById('institution').value
+            };
+            
+            document.getElementById('registrationForm').classList.add('hidden');
+            document.getElementById('instructionsPage').classList.remove('hidden');
+        });
+
+        // Start test button
+        document.getElementById('startTest').addEventListener('click', function() {
+            initializeQuestions();
+            document.getElementById('instructionsPage').classList.add('hidden');
+            document.getElementById('testPage').classList.remove('hidden');
+            startTimer();
+            loadQuestion();
+        });
+
+        // Timer function
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        // Load question
+        function loadQuestion() {
+            if (currentQuestion >= shuffledQuestions.length) {
+                submitTest();
+                return;
+            }
+
+            const question = shuffledQuestions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / shuffledQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            container.innerHTML = `
+                <div class="question-number">Soal ${currentQuestion + 1} dari ${shuffledQuestions.length}</div>
+
+                <div class="options" id="options">
+                    ${question.shuffledOptions.map((option, index) => `
+                        <div class="option" data-index="${index}" data-type="${option.type}">
+                            <div class="option-text">${option.text}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <strong>PALING menggambarkan:</strong>
+                            <div id="mostChoice" style="min-height: 40px; background: #f8f9fa; border-radius: 5px; padding: 10px; margin-top: 5px;">Belum dipilih</div>
+                        </div>
+                        <div>
+                            <strong>KURANG menggambarkan:</strong>
+                            <div id="leastChoice" style="min-height: 40px; background: #f8f9fa; border-radius: 5px; padding: 10px; margin-top: 5px;">Belum dipilih</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add click handlers
+            const options = container.querySelectorAll('.option');
+            let selectedMost = null;
+            let selectedLeast = null;
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    const type = this.dataset.type;
+                    const text = this.querySelector('.option-text').textContent;
+
+                    // Show selection menu
+                    const menu = document.createElement('div');
+                    menu.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        z-index: 1001;
+                        text-align: center;
+                    `;
+                    
+                    menu.innerHTML = `
+                        <div style="margin-bottom: 15px; font-weight: 600;">${text}</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button class="choice-btn" data-choice="most" style="padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">PALING</button>
+                            <button class="choice-btn" data-choice="least" style="padding: 10px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">KURANG</button>
+                        </div>
+                        <button id="cancelChoice" style="margin-top: 10px; padding: 5px 15px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Batal</button>
+                    `;
+
+                    document.body.appendChild(menu);
+
+                    menu.querySelectorAll('.choice-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const choice = this.dataset.choice;
+                            
+                            if (choice === 'most') {
+                                if (selectedLeast === index) {
+                                    alert('Tidak boleh memilih jawaban yang sama untuk kedua pilihan!');
+                                    document.body.removeChild(menu);
+                                    return;
+                                }
+                                selectedMost = index;
+                                document.getElementById('mostChoice').textContent = text;
+                                document.getElementById('mostChoice').style.background = '#d4edda';
+                            } else {
+                                if (selectedMost === index) {
+                                    alert('Tidak boleh memilih jawaban yang sama untuk kedua pilihan!');
+                                    document.body.removeChild(menu);
+                                    return;
+                                }
+                                selectedLeast = index;
+                                document.getElementById('leastChoice').textContent = text;
+                                document.getElementById('leastChoice').style.background = '#f8d7da';
+                            }
+                            
+                            document.body.removeChild(menu);
+                            
+                            // Check if both selections are made
+                            if (selectedMost !== null && selectedLeast !== null) {
+                                document.getElementById('nextQuestion').disabled = false;
+                            }
+                        });
+                    });
+
+                    document.getElementById('cancelChoice').addEventListener('click', function() {
+                        document.body.removeChild(menu);
+                    });
+                });
+            });
+
+            // Next question handler
+            document.getElementById('nextQuestion').onclick = function() {
+                if (selectedMost !== null && selectedLeast !== null) {
+                    const mostOption = question.shuffledOptions[selectedMost];
+                    const leastOption = question.shuffledOptions[selectedLeast];
+                    
+                    answers.push({
+                        question: currentQuestion + 1,
+                        most: { text: mostOption.text, type: mostOption.type },
+                        least: { text: leastOption.text, type: leastOption.type }
+                    });
+                    
+                    currentQuestion++;
+                    document.getElementById('nextQuestion').disabled = true;
+                    loadQuestion();
+                }
+            };
+        }
+
+        // Submit test
+        function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Calculate results
+            const scores = { D: 0, I: 0, S: 0, C: 0 };
+            
+            answers.forEach(answer => {
+                scores[answer.most.type] += 2; // Most gets 2 points
+                scores[answer.least.type] -= 1; // Least gets -1 point
+            });
+            
+            // Show results page
+            document.getElementById('testPage').classList.add('hidden');
+            document.getElementById('resultsPage').classList.remove('hidden');
+            
+            // Send data to Google Sheets
+            sendToGoogleSheets(scores);
+        }
+
+        // Send data to Google Sheets
+        function sendToGoogleSheets(scores) {
+            const dominantType = Object.entries(scores).sort(([,a], [,b]) => b - a)[0][0];
+            const currentDate = new Date().toLocaleString('id-ID');
+            
+            // Prepare data for Google Sheets
+            const formData = new FormData();
+            formData.append('timestamp', currentDate);
+            formData.append('nama', participantData.fullName);
+            formData.append('telepon', participantData.phone);
+            formData.append('email', participantData.email);
+            formData.append('divisi', participantData.division);
+            formData.append('instansi', participantData.institution);
+            formData.append('scoreD', scores.D);
+            formData.append('scoreI', scores.I);
+            formData.append('scoreS', scores.S);
+            formData.append('scoreC', scores.C);
+            formData.append('dominantType', dominantType);
+            formData.append('description', getPersonalityDescription(dominantType));
+            
+            // Google Apps Script Web App URL
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_ZAA8b5-RybG9Ewsf-C95LRDlf8_MlvKu5_NGuhK7kqQHM7gKSbM9GJq-4DV3x2dYvQ/exec';
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    document.getElementById('statusText').textContent = 'Data berhasil dikirim!';
+                    document.getElementById('submissionStatus').style.background = '#d4edda';
+                    document.getElementById('submissionStatus').style.color = '#155724';
+                } else {
+                    throw new Error('Gagal mengirim data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('statusText').textContent = 'Gagal mengirim data. Silakan hubungi administrator.';
+                document.getElementById('submissionStatus').style.background = '#f8d7da';
+                document.getElementById('submissionStatus').style.color = '#721c24';
+            });
+        }
+
+        function getPersonalityDescription(type) {
+            const descriptions = {
+                'D': 'Dominance - Suka tantangan, berorientasi hasil, tegas dalam mengambil keputusan',
+                'I': 'Influence - Antusias, suka bersosialisasi, optimis dan persuasif',
+                'S': 'Steadiness - Sabar, dapat diandalkan, suka stabilitas dan kerja tim',
+                'C': 'Compliance - Teliti, analitis, mengutamakan kualitas dan akurasi'
+            };
+            return descriptions[type] || 'Tidak diketahui';
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98dca5db57cafb86',t:'MTc2MDMzNTU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
